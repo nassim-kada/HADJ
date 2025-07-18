@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter by Letter Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: none;
+        }
+
+        .text-animation {
+            font-size: clamp(2rem, 8vw, 8rem);
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(255,255,255,0.3);
+            line-height: 1.2;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            animation: letter-appear 0.8s ease-in-out forwards;
+        }
+
+        @keyframes letter-appear {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .final-text {
+            font-size: clamp(3rem, 10vw, 10rem);
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 5px 5px 10px rgba(255,255,255,0.4);
+            opacity: 0;
+            transform: scale(0.3);
+            transition: all 1.5s ease-in-out;
+            margin-top: 2rem;
+            line-height: 1.1;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .final-text.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .glow {
+            animation: glow-pulse 2s infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            from {
+                text-shadow: 5px 5px 10px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.3);
+            }
+            to {
+                text-shadow: 5px 5px 10px rgba(255,255,255,0.4), 0 0 40px rgba(255,255,255,0.7), 0 0 60px rgba(255,255,255,0.5);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .final-text {
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .text-animation {
+                font-size: clamp(1.5rem, 6vw, 6rem);
+            }
+            .final-text {
+                font-size: clamp(2rem, 8vw, 8rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-animation" id="textAnimation"></div>
+        <div class="final-text" id="finalText">MA YHAMOUNICH NSA WA7DOU5RIN</div>
+    </div>
+
+    <script>
+        const text = "MA YHAMOUNICH NSA WA7DOU5RIN";
+        const animationElement = document.getElementById('textAnimation');
+        const finalElement = document.getElementById('finalText');
+        
+        let currentIndex = 0;
+        
+        function addNextLetter() {
+            if (currentIndex < text.length) {
+                const letter = document.createElement('span');
+                letter.className = 'letter';
+                letter.textContent = text[currentIndex];
+                letter.style.animationDelay = '0s';
+                animationElement.appendChild(letter);
+                currentIndex++;
+                
+                // Continue adding letters
+                setTimeout(addNextLetter, 150);
+            } else {
+                // All letters added, show final text after a delay
+                setTimeout(() => {
+                    finalElement.classList.add('show');
+                    setTimeout(() => {
+                        finalElement.classList.add('glow');
+                    }, 1500);
+                }, 2000);
+            }
+        }
+        
+        // Start the animation
+        setTimeout(addNextLetter, 1000);
+    </script>
+</body>
+</html>
